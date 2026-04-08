@@ -1,8 +1,14 @@
 .notes-container {
   background: #0f172a;
+  width: 300px;
   border-radius: 16px;
   padding: 20px;
   color: white;
+}
+@media (max-width: 768px) {
+  .notes-container {
+    width: 100%;
+  }
 }
 
 .notes-container textarea {

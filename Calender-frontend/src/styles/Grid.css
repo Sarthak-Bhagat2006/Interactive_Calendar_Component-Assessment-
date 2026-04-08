@@ -44,6 +44,17 @@
   gap: 10px;
 }
 
+@media (max-width: 768px) {
+  .grid {
+    gap: 6px;
+  }
+
+  .day {
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+
 /* DAY CELL */
 .day {
   height: 45px;
@@ -106,4 +117,11 @@
 
 .problem-box a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .problem-box {
+    font-size: 14px;
+    padding: 10px;
+  }
 }

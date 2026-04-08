@@ -2,6 +2,13 @@
   min-height: 100vh;
   padding: 30px;
   background: radial-gradient(circle at top, #111827, #020617);
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
 }
 
 /* CARD */

@@ -27,7 +27,9 @@ export default function Grid({
   const today = new Date();
 
   function handleClick(day) {
-    if (day > today) return;
+    if (day > today) {
+      alert("You cannot access future problems.\nCome back on that day!");
+    }
 
     setSelectedDate(day);
 
