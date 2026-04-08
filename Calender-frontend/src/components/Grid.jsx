@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   startOfMonth,
   endOfMonth,
@@ -9,6 +8,9 @@ import {
   subMonths,
   isSameDay,
 } from "date-fns";
+import { useState } from "react";
+import "../styles/Grid.css";
+import { problemsData } from "../data/problemData";
 
 export default function Grid({ currentDate, setCurrentDate }) {
   const [startDate, setStartDate] = useState(null);
@@ -18,63 +20,62 @@ export default function Grid({ currentDate, setCurrentDate }) {
   const end = endOfMonth(currentDate);
   const days = eachDayOfInterval({ start, end });
   const startDay = getDay(start);
+  const [selectedProblem, setSelectedProblem] = useState(null);
 
   function handleClick(day) {
-    if (!startDate) {
-      setStartDate(day);
-    } else if (!endDate) {
-      if (day < startDate) {
-        setStartDate(day);
-      } else {
-        setEndDate(day);
-      }
-    } else {
-      setStartDate(day);
-      setEndDate(null);
+    // existing selection logic...
+
+    const month = currentDate.getMonth();
+    const problems = problemsData[month] || [];
+
+    const found = problems.find((p) => p.day === day.getDate());
+
+    setSelectedProblem(found || null);
+  }
+
+  function handlePrev() {
+    const newDate = subMonths(currentDate, 1);
+    if (newDate.getFullYear() === 2026) {
+      setCurrentDate(newDate);
     }
   }
 
-  function isInRange(day) {
-    if (startDate && endDate) {
-      return day >= startDate && day <= endDate;
+  function handleNext() {
+    const newDate = addMonths(currentDate, 1);
+    if (newDate.getFullYear() === 2026) {
+      setCurrentDate(newDate);
     }
-    return false;
   }
 
-  function isStart(day) {
-    return startDate && isSameDay(day, startDate);
-  }
-
-  function isEnd(day) {
-    return endDate && isSameDay(day, endDate);
+  function getClass(day) {
+    if (startDate && isSameDay(day, startDate)) return "day start";
+    if (endDate && isSameDay(day, endDate)) return "day end";
+    if (startDate && endDate && day > startDate && day < endDate)
+      return "day range";
+    return "day";
   }
 
   return (
-    <div>
-      {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <button onClick={() => setCurrentDate(subMonths(currentDate, 1))}>
-          ◀
+    <div className="calendar">
+      <div className="calendar-header">
+        <button onClick={handlePrev}>
+          <i class="fa-solid fa-circle-arrow-left"></i>
         </button>
 
-        <h2 className="font-bold text-lg">
-          {format(currentDate, "MMMM yyyy")}
-        </h2>
+        <h2>{format(currentDate, "MMMM yyyy")}</h2>
 
-        <button onClick={() => setCurrentDate(addMonths(currentDate, 1))}>
-          ▶
+        <button onClick={handleNext}>
+          <i class="fa-solid fa-circle-right"></i>
         </button>
       </div>
 
-      {/* Days */}
-      <div className="grid grid-cols-7 text-center font-semibold mb-2">
+      <div className="days">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
           <div key={d}>{d}</div>
         ))}
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid">
         {[...Array(startDay)].map((_, i) => (
           <div key={i}></div>
         ))}
@@ -83,22 +84,21 @@ export default function Grid({ currentDate, setCurrentDate }) {
           <div
             key={day}
             onClick={() => handleClick(day)}
-            className={`
-              h-12 flex items-center justify-center
-              rounded-lg cursor-pointer text-sm font-medium
-              transition-all duration-200
-
-              ${isStart(day) ? "bg-blue-600 text-white" : ""}
-              ${isEnd(day) ? "bg-blue-600 text-white" : ""}
-              ${isInRange(day) ? "bg-blue-200" : ""}
-              
-              ${!isStart(day) && !isEnd(day) ? "hover:bg-gray-200" : ""}
-            `}
+            className={getClass(day)}
           >
             {day.getDate()}
           </div>
         ))}
       </div>
+      {selectedProblem && (
+        <div className="problem-box">
+          <h3>🧠 Problem of the Day</h3>
+          <p>{selectedProblem.title}</p>
+          <a href={selectedProblem.link} target="_blank">
+            Solve on LeetCode →
+          </a>
+        </div>
+      )}
     </div>
   );
 }

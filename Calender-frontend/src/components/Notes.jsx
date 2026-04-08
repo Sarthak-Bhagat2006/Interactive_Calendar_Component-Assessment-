@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "../styles/Notes.css";
 
 export default function Notes() {
   const [note, setNote] = useState("");
@@ -13,22 +14,16 @@ export default function Notes() {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      <h2 className="text-lg font-semibold mb-2">Notes</h2>
+    <div className="notes">
+      <h3>Notes</h3>
 
       <textarea
         value={note}
         onChange={(e) => setNote(e.target.value)}
-        className="flex-1 border rounded-lg p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
         placeholder="Write your notes..."
       />
 
-      <button
-        onClick={handleSave}
-        className="mt-3 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-      >
-        Save
-      </button>
+      <button onClick={handleSave}>Save</button>
     </div>
   );
 }
