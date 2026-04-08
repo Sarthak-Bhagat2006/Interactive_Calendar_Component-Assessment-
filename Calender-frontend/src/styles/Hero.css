@@ -11,15 +11,23 @@
   opacity: 0.8;
 }
 
-/* HERO TEXT */
 .hero-overlay {
   position: absolute;
   bottom: 0;
   right: 0;
+
+  width: 350px; /* FIXED WIDTH */
+  height: 120px; /* FIXED HEIGHT */
+
   background: #92a9cf;
-  padding: 15px 25px;
+  padding: 15px;
+
   border-top-left-radius: 20px;
   color: black;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .hero-overlay h2 {

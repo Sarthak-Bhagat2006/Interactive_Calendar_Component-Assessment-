@@ -7,14 +7,20 @@ import "./App.css";
 
 export default function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
 
   return (
     <CalenderMap
       hero={<Hero date={currentDate} />}
       calendar={
-        <Grid currentDate={currentDate} setCurrentDate={setCurrentDate} />
+        <Grid
+          currentDate={currentDate}
+          setCurrentDate={setCurrentDate}
+          setSelectedDate={setSelectedDate}
+          selectedDate={selectedDate}
+        />
       }
-      notes={<Notes />}
+      notes={<Notes selectedDate={selectedDate} />}
     ></CalenderMap>
   );
 }

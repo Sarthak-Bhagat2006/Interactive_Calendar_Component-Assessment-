@@ -9,6 +9,7 @@ export default function CalenderMap({ hero, calendar, notes }) {
         {/* BOTTOM SECTION */}
         <div className="bottom-section">
           {notes}
+
           {calendar}
         </div>
       </div>

@@ -55,13 +55,26 @@
   cursor: pointer;
   transition: all 0.2s;
   background: rgba(255, 255, 255, 0.05);
+  transition: all 0.25s ease;
+}
+
+.day.today {
+  border: 1px solid #f97316;
+  background: rgba(249, 115, 22, 0.1);
+  color: #f97316;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
 }
 
 /* HOVER */
 .day:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(123, 164, 223, 0.2);
+  cursor: pointer;
 }
 
+.day.selected {
+  background: rgba(123, 164, 223, 0.2);
+}
 /* RANGE STYLES */
 .start,
 .end {

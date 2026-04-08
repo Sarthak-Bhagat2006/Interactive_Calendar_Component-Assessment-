@@ -12,18 +12,24 @@ import { useState } from "react";
 import "../styles/Grid.css";
 import { problemsData } from "../data/problemData";
 
-export default function Grid({ currentDate, setCurrentDate }) {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-
+export default function Grid({
+  currentDate,
+  setCurrentDate,
+  setSelectedDate,
+  selectedDate,
+}) {
   const start = startOfMonth(currentDate);
   const end = endOfMonth(currentDate);
   const days = eachDayOfInterval({ start, end });
   const startDay = getDay(start);
   const [selectedProblem, setSelectedProblem] = useState(null);
 
+  const today = new Date();
+
   function handleClick(day) {
-    // existing selection logic...
+    if (day > today) return;
+
+    setSelectedDate(day);
 
     const month = currentDate.getMonth();
     const problems = problemsData[month] || [];
@@ -48,10 +54,17 @@ export default function Grid({ currentDate, setCurrentDate }) {
   }
 
   function getClass(day) {
-    if (startDate && isSameDay(day, startDate)) return "day start";
-    if (endDate && isSameDay(day, endDate)) return "day end";
-    if (startDate && endDate && day > startDate && day < endDate)
-      return "day range";
+    const isToday =
+      isSameDay(day, today) &&
+      currentDate.getMonth() === today.getMonth() &&
+      currentDate.getFullYear() === today.getFullYear();
+
+    const isSelected = selectedDate && isSameDay(day, selectedDate);
+
+    if (isToday) return "day today";
+
+    if (isSelected) return "day selected";
+
     return "day";
   }
 
@@ -59,13 +72,13 @@ export default function Grid({ currentDate, setCurrentDate }) {
     <div className="calendar">
       <div className="calendar-header">
         <button onClick={handlePrev}>
-          <i class="fa-solid fa-circle-arrow-left"></i>
+          <i className="fa-solid fa-circle-arrow-left"></i>
         </button>
 
         <h2>{format(currentDate, "MMMM yyyy")}</h2>
 
         <button onClick={handleNext}>
-          <i class="fa-solid fa-circle-right"></i>
+          <i className="fa-solid fa-circle-right"></i>
         </button>
       </div>
 
@@ -82,7 +95,7 @@ export default function Grid({ currentDate, setCurrentDate }) {
 
         {days.map((day) => (
           <div
-            key={day}
+            key={day.toISOString()}
             onClick={() => handleClick(day)}
             className={getClass(day)}
           >
@@ -92,7 +105,7 @@ export default function Grid({ currentDate, setCurrentDate }) {
       </div>
       {selectedProblem && (
         <div className="problem-box">
-          <h3>🧠 Problem of the Day</h3>
+          <h3>Problem of the Day</h3>
           <p>{selectedProblem.title}</p>
           <a href={selectedProblem.link} target="_blank">
             Solve on LeetCode →
