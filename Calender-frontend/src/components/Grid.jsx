@@ -115,8 +115,8 @@ export default function Grid({
         ))}
 
         {days.map((day) => {
-          const key = day.toISOString().split("T")[0];
-          const hasNote = notes[key];
+          const key = format(day, "yyyy-MM-dd");
+          const hasNote = key in notes; // ✅ FIX
 
           return (
             <div
