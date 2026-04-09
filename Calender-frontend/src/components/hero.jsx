@@ -11,7 +11,7 @@ export default function Hero({ date }) {
       <div className="hero-overlay">
         <h2>{data.title}</h2>
         <p>
-          {data.description} <a href={data.blog}>...blog</a>
+          {data.description} <a href={data.blog}>...more</a>
         </p>
       </div>
     </div>
