@@ -29,6 +29,7 @@ export default function Notes({ selectedDate }) {
     storedNotes[key] = note;
 
     localStorage.setItem("notes", JSON.stringify(storedNotes));
+    window.dispatchEvent(new Event("notesUpdated"));
 
     setSavedNote(note);
   }

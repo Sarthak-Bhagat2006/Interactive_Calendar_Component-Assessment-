@@ -8,7 +8,7 @@ import {
   subMonths,
   isSameDay,
 } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/Grid.css";
 import { problemsData } from "../data/problemData";
 
@@ -24,14 +24,33 @@ export default function Grid({
   const startDay = getDay(start);
   const [selectedProblem, setSelectedProblem] = useState(null);
 
+  const [notes, setNotes] = useState({});
+
   const today = new Date();
 
+  useEffect(() => {
+    const loadNotes = () => {
+      const stored = JSON.parse(localStorage.getItem("notes")) || {};
+      setNotes(stored);
+    };
+
+    loadNotes();
+
+    window.addEventListener("notesUpdated", loadNotes);
+
+    return () => {
+      window.removeEventListener("notesUpdated", loadNotes);
+    };
+  }, []);
+
   function handleClick(day) {
+    setSelectedDate(day);
+
     if (day > today) {
       alert("You cannot access future problems.\nCome back on that day!");
+      setSelectedProblem(null);
+      return;
     }
-
-    setSelectedDate(day);
 
     const month = currentDate.getMonth();
     const problems = problemsData[month] || [];
@@ -95,22 +114,30 @@ export default function Grid({
           <div key={i}></div>
         ))}
 
-        {days.map((day) => (
-          <div
-            key={day.toISOString()}
-            onClick={() => handleClick(day)}
-            className={getClass(day)}
-          >
-            {day.getDate()}
-          </div>
-        ))}
+        {days.map((day) => {
+          const key = day.toISOString().split("T")[0];
+          const hasNote = notes[key];
+
+          return (
+            <div
+              key={day.toISOString()}
+              onClick={() => handleClick(day)}
+              className={getClass(day)}
+            >
+              {day.getDate()}
+
+              {hasNote && <span className="note-dot"></span>}
+            </div>
+          );
+        })}
       </div>
       {selectedProblem && (
         <div className="problem-box">
           <h3>Problem of the Day</h3>
           <p>{selectedProblem.title}</p>
           <a href={selectedProblem.link} target="_blank">
-            Solve on LeetCode →
+            Solve on LeetCode
+            <i className="fa-solid fa-arrow-up-right-from-square"></i>
           </a>
         </div>
       )}
