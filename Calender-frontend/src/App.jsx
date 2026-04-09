@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CalenderMap from "./components/CalenderMap";
-import Hero from "./components/Hero";
+import Hero from "./components/HeroSection";
 import Grid from "./components/Grid";
 import Notes from "./components/Notes";
 import "./App.css";
